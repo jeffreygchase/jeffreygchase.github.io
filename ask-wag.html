@@ -87,6 +87,20 @@
   @media (prefers-color-scheme:dark){ .wagbar{ background:var(--pine); color:#141210; } }
   .wagbar .msg{ font-family:Georgia,serif; font-size:.98rem; font-weight:700; }
   .wagbar .go{ background:var(--gold); color:#231a0c; font-weight:800; padding:7px 15px; border-radius:9px; font-size:.85rem; white-space:nowrap; }
+  /* QA tester name + feedback widget */
+  .qa-name{ margin-bottom:16px; }
+  .qa-name label{ display:block; font-size:.82rem; font-weight:700; margin-bottom:5px; }
+  .qa-name label span{ color:var(--taupe); font-weight:600; }
+  .qa-name input{ width:100%; padding:11px 14px; border:1.5px solid var(--line); border-radius:12px; background:var(--card); color:var(--ink); font-size:.95rem; font-family:inherit; outline:none; }
+  .qa-name input:focus{ border-color:var(--gold); }
+  .fbrow{ display:flex; align-items:center; gap:8px; margin-top:9px; font-size:.82rem; color:var(--taupe); flex-wrap:wrap; }
+  .fbrow button{ background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:3px 9px; cursor:pointer; font-family:inherit; font-size:.92rem; color:var(--ink); }
+  .fbrow button:hover{ border-color:var(--gold); }
+  .fbrow .done{ color:var(--good); font-weight:700; }
+  .fbnote{ display:flex; gap:6px; margin-top:8px; }
+  .fbnote input{ flex:1; padding:7px 11px; border:1.5px solid var(--line); border-radius:10px; background:var(--paper); color:var(--ink); font-family:inherit; font-size:.88rem; outline:none; }
+  .fbnote input:focus{ border-color:var(--gold); }
+  .fbnote button{ background:var(--gold); color:#231a0c; border:none; border-radius:9px; padding:0 13px; font-weight:800; cursor:pointer; font-family:inherit; }
 
   /* resident picker overlay */
   .picker{ position:absolute; inset:0; background:var(--paper); z-index:40; display:flex; flex-direction:column; padding:22px 20px; overflow-y:auto; }
@@ -109,6 +123,10 @@
   <div class="picker" id="picker">
     <h2>Ask Wag 🐾</h2>
     <div class="sub">Pick a resident to see how Wag already knows their dog. (Demo — every dog has a real history.)</div>
+    <div class="qa-name">
+      <label>Your name <span>· QA: we log test sessions for coverage</span></label>
+      <input id="testerName" placeholder="e.g. John" autocomplete="off">
+    </div>
     <div id="whoList"></div>
     <div class="note">Ask Wag is a warm dog-care assistant — not a vet. Powered by Claude.</div>
   </div>
@@ -183,6 +201,7 @@ const CHIPS = {
 let current = null;      // current resident
 let messages = [];       // [{role, content}]
 let busy = false;
+let testerName = "";     // QA tester (transparent — logged for coverage)
 
 const $ = id => document.getElementById(id);
 const thread = $("thread"), chipsEl = $("chips"), input = $("input"), sendBtn = $("sendBtn");
@@ -227,7 +246,7 @@ async function send(text){
   try{
     const resp = await fetch(API_URL, {
       method:"POST", headers:{ "content-type":"application/json" },
-      body: JSON.stringify({ profile: current ? current.profile : "", messages }),
+      body: JSON.stringify({ profile: current ? current.profile : "", messages, tester: testerName, resident: current ? current.id : "" }),
     });
     if(!resp.ok || !resp.body){
       const e = await resp.json().catch(()=>({}));
@@ -252,6 +271,7 @@ async function send(text){
     }
     bub.innerHTML = renderText(acc || "…");
     messages.push({ role:"assistant", content: acc });
+    if (acc) addFeedback(bub, acc);
   }catch(err){
     bub.innerHTML = renderText("Sorry — I couldn't reach the help desk just now. Please try again in a moment. (" + err.message + ")");
   }finally{
@@ -259,8 +279,35 @@ async function send(text){
   }
 }
 
+// ── feedback (transparent QA) ───────────────────────────────────────────
+function sendFeedback(rating, note, context){
+  fetch(API_URL + "/feedback", {
+    method:"POST", headers:{ "content-type":"application/json" },
+    body: JSON.stringify({ tester: testerName || "anon", rating: rating || null, note: note || "", resident: current ? current.id : "", context: (context || "").slice(0, 900) }),
+  }).catch(()=>{});
+}
+function addFeedback(bub, context){
+  const row = document.createElement("div");
+  row.className = "fbrow";
+  row.innerHTML = '<span>Helpful?</span><button type="button" data-r="up">👍</button><button type="button" data-r="down">👎</button><button type="button" data-note>💬 note</button>';
+  bub.appendChild(row);
+  row.querySelectorAll("button[data-r]").forEach(b => {
+    b.onclick = () => { sendFeedback(b.dataset.r, "", context); row.innerHTML = '<span class="done">Thanks — logged 🐾</span>'; };
+  });
+  row.querySelector("button[data-note]").onclick = () => {
+    const nb = document.createElement("div"); nb.className = "fbnote";
+    nb.innerHTML = '<input placeholder="What worked, or didn\'t?"><button type="button">Send</button>';
+    row.replaceWith(nb);
+    const inp = nb.querySelector("input"); inp.focus();
+    const submit = () => { const v = inp.value.trim(); if (v) sendFeedback("", v, context); nb.innerHTML = '<span class="done">Thanks — logged 🐾</span>'; };
+    nb.querySelector("button").onclick = submit;
+    inp.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); submit(); } });
+  };
+}
+
 // ── resident selection ──────────────────────────────────────────────────
 function pickResident(r){
+  const t = $("testerName"); if (t && t.value.trim()) testerName = t.value.trim();
   current = r; messages = []; thread.innerHTML = "";
   $("picker").style.display = "none";
   addRow("wag", '<p class="serif">' + esc(r.greeting) + '</p>');
