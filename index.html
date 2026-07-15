@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jeffrey G. Chase — AI Integration Engineer</title>
+<meta name="description" content="AI Integration Engineer building LLM-integrated systems — RAG, agents, Claude & OpenAI APIs — on 25 years of enterprise architecture.">
+<style>
+  :root{
+    --bg:#0a0e14; --panel:#111823; --line:#1e2a3a; --text:#e6edf3; --muted:#8b98a9;
+    --accent:#4da3ff; --accent2:#7c5cff; --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:960px;margin:0 auto;padding:0 24px}
+  section{padding:72px 0;border-bottom:1px solid var(--line)}
+  h2{font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-family:var(--mono);margin-bottom:28px;font-weight:600}
+  /* hero */
+  header{padding:120px 0 90px;background:radial-gradient(1200px 500px at 70% -10%,rgba(124,92,255,.14),transparent),radial-gradient(900px 500px at 10% 0%,rgba(77,163,255,.12),transparent)}
+  .kicker{font-family:var(--mono);color:var(--accent);font-size:14px;letter-spacing:.1em;margin-bottom:18px}
+  h1{font-size:clamp(34px,6vw,58px);line-height:1.05;letter-spacing:-.02em;font-weight:800;margin-bottom:20px}
+  h1 .grad{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lead{font-size:clamp(17px,2.2vw,20px);color:var(--muted);max-width:640px;margin-bottom:34px}
+  .cta{display:flex;gap:14px;flex-wrap:wrap}
+  .btn{display:inline-block;padding:12px 22px;border-radius:8px;font-weight:600;font-size:15px}
+  .btn.primary{background:var(--accent);color:#06101f}
+  .btn.primary:hover{background:#6bb4ff;text-decoration:none}
+  .btn.ghost{border:1px solid var(--line);color:var(--text)}
+  .btn.ghost:hover{border-color:var(--accent);text-decoration:none}
+  /* hero layout with portrait */
+  .hero-flex{display:flex;align-items:center;gap:48px;flex-wrap:wrap}
+  .hero-text{flex:1 1 380px;min-width:0}
+  .hero-photo{flex:0 0 250px;margin-inline:auto}
+  .hero-photo img{width:250px;max-width:60vw;border-radius:16px;display:block;border:1px solid var(--line);
+    box-shadow:0 24px 60px rgba(0,0,0,.5);outline:1px solid rgba(124,92,255,.25);outline-offset:6px}
+  /* about */
+  .about p{font-size:18px;color:#cbd5e1;max-width:720px;margin-bottom:16px}
+  .about strong{color:var(--text)}
+  /* services grid */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media (max-width:760px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:480px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:24px;transition:border-color .2s,transform .2s}
+  .card:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .card h3{font-size:18px;margin-bottom:8px}
+  .card p{color:var(--muted);font-size:15px}
+  .card .ico{font-family:var(--mono);color:var(--accent);font-size:13px;margin-bottom:14px;display:block}
+  /* work */
+  .work-item{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:26px;margin-bottom:18px}
+  .work-item h3{font-size:20px;margin-bottom:6px}
+  .work-item .tags{font-family:var(--mono);font-size:12.5px;color:var(--accent);margin-top:14px}
+  .work-item p{color:#cbd5e1}
+  /* experience */
+  .exp{position:relative;padding-left:26px;border-left:2px solid var(--line);margin-bottom:26px}
+  .exp::before{content:"";position:absolute;left:-7px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--accent)}
+  .exp h3{font-size:18px}
+  .exp .meta{font-family:var(--mono);font-size:13px;color:var(--muted);margin:2px 0 8px}
+  .exp p{color:var(--muted);font-size:15px}
+  /* contact */
+  .contact .lead{margin-bottom:24px}
+  .links{display:flex;gap:16px;flex-wrap:wrap}
+  .links a{font-family:var(--mono);font-size:17px;font-weight:600;padding:15px 26px;border:1px solid var(--line);
+    border-radius:10px;color:var(--text);transition:border-color .2s,color .2s,transform .2s,background .2s}
+  .links a:hover{border-color:var(--accent);color:var(--accent);text-decoration:none;transform:translateY(-2px)}
+  .links a:first-child{background:var(--accent);color:#06101f;border-color:var(--accent)}
+  .links a:first-child:hover{background:#6bb4ff;color:#06101f}
+  footer{padding:34px 0;color:var(--muted);font-family:var(--mono);font-size:13px;text-align:center}
+  @media (prefers-color-scheme:light){
+    /* deliberately committing to the dark dev look — no light variant */
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap hero-flex">
+    <div class="hero-text">
+      <div class="kicker">// AI Integration Engineer</div>
+      <h1>I build <span class="grad">LLM-integrated systems</span><br>that actually ship.</h1>
+      <p class="lead">RAG pipelines, agentic assistants, and Claude &amp; OpenAI API integrations — built on 25 years of production enterprise architecture and a physics brain.</p>
+    </div>
+    <div class="hero-photo">
+      <img src="jeff.jpg" alt="Jeffrey G. Chase">
+    </div>
+  </div>
+</header>
+
+<section class="about wrap">
+  <h2>About</h2>
+  <p>I'm a physics-educated software engineer who builds <strong>LLM-integrated systems</strong> — retrieval-augmented pipelines, multi-agent assistants, and Claude/OpenAI API integrations — on top of two and a half decades architecting enterprise-scale software for Fortune 500 insurers and defense programs.</p>
+  <p>Most "AI integration" is a ChatGPT call bolted onto a form. I build the real thing: <strong>stateful, multi-agent systems</strong> with vector retrieval, tool/function calling, streaming, and error handling that holds up in production. The engineering judgment comes from 25 years of building systems that can't fall down — the AI is just the newest layer on a very deep stack.</p>
+  <p>I'll tell you what's possible and what isn't, <strong>up front.</strong> No sales pitch, no hand-waving — straight answers and code you can actually maintain.</p>
+</section>
+
+<section class="wrap">
+  <h2>What I build</h2>
+  <div class="grid">
+    <div class="card">
+      <span class="ico">01</span>
+      <h3>LLM API Integration</h3>
+      <p>Claude or OpenAI wired into your app or workflow — streaming, tool calling, retries, secure key handling. Done right, not fragile.</p>
+    </div>
+    <div class="card">
+      <span class="ico">02</span>
+      <h3>RAG &amp; Chatbots</h3>
+      <p>Assistants that answer from <em>your</em> data — vector retrieval over your docs, grounded and accurate, not hallucinating.</p>
+    </div>
+    <div class="card">
+      <span class="ico">03</span>
+      <h3>AI Agents &amp; Automation</h3>
+      <p>Multi-step agentic workflows with tool/MCP integration — systems that do work, not just chat.</p>
+    </div>
+    <div class="card">
+      <span class="ico">04</span>
+      <h3>Architecture &amp; Backend</h3>
+      <p>The plumbing AI runs on — Java, Python, Node, SQL/NoSQL, Docker, CI/CD, DevSecOps. 25 years of it.</p>
+    </div>
+    <div class="card">
+      <span class="ico">05</span>
+      <h3>Legacy Modernization</h3>
+      <p>Aging enterprise systems dragged into the present — containerization, cloud migration, CI/CD, security remediation. I've done exactly this at scale.</p>
+    </div>
+    <div class="card">
+      <span class="ico">06</span>
+      <h3>AI Architecture &amp; Review</h3>
+      <p>Not sure how to add AI to your product — or whether what you built is sound? I'll architect the integration or audit what you've got. Senior judgment, no guesswork.</p>
+    </div>
+  </div>
+</section>
+
+<section id="work" class="wrap">
+  <h2>Selected work</h2>
+  <div class="work-item">
+    <h3>Persistent-Memory AI Assistant</h3>
+    <p>A multi-agent assistant built from scratch with a <strong>temporal knowledge graph</strong> (thousands of nodes), retrieval-augmented context injection, Claude API orchestration, and MCP tool-servers running as always-on background services. Stateful memory that persists and retrieves across sessions.</p>
+    <div class="tags">Claude API · RAG · Knowledge Graph · Multi-Agent · MCP · Node.js</div>
+  </div>
+  <div class="work-item">
+    <h3>Claude-Integrated Discord Bot</h3>
+    <p>A live production bot with Claude API integration handling real-time community interaction — conversational AI wired into a Node.js service.</p>
+    <div class="tags">Claude API · Node.js · Discord.js</div>
+  </div>
+  <div class="work-item">
+    <h3>Enterprise Modernization at Scale</h3>
+    <p>Lead Architect over ~30 Group Life applications at a Fortune 500 insurer: Azure DevOps CI/CD pipelines, containerized delivery to OpenShift, a .NET Core rules engine replacing 1,000+ manual rules, and org-wide security remediation (Log4Shell, WebSphere migrations).</p>
+    <div class="tags">Java · .NET Core · Docker · OpenShift · CI/CD · DevSecOps</div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>Experience</h2>
+  <div class="exp">
+    <h3>Lead Architect — Fortune 500 Insurance</h3>
+    <div class="meta">2014 – 2026 · Raleigh, NC</div>
+    <p>Architecture and hands-on development across an enterprise Group Life portfolio — CI/CD, containerization, rules engines, high-throughput call-center systems processing thousands of transactions per minute.</p>
+  </div>
+  <div class="exp">
+    <h3>Senior Engineer — Defense &amp; Missile Defense</h3>
+    <div class="meta">2003 – 2014 · San Diego / El Segundo, CA</div>
+    <p>High-reliability defense software: Kalman-filter tracking algorithms for the Ballistic Missile Defense System, multi-threaded C++ on Linux clusters, PKI security modules, Windows-to-Linux ports.</p>
+  </div>
+  <div class="exp">
+    <h3>M.S. Physics — University of Florida</h3>
+    <div class="meta">PhD coursework, theoretical particle physics · Ramond group</div>
+    <p>Graduate-level math and physics — the foundation under the embeddings, retrieval, and model behavior. B.S. Mathematics, Stockton University.</p>
+  </div>
+</section>
+
+<section id="contact" class="contact wrap">
+  <h2>Contact</h2>
+  <p class="lead">Building something with AI and want it done right? Let's talk about it.</p>
+  <div class="links">
+    <a href="mailto:jeff@jeffreygchase.dev">jeff@jeffreygchase.dev</a>
+    <a href="https://www.linkedin.com/in/jeffrey-g-chase-872b9a16" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://github.com/jeffreygchase" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">© 2026 Jeffrey G. Chase · Raleigh, NC · Built from scratch, like everything else.</div>
+</footer>
+
+</body>
+</html>
