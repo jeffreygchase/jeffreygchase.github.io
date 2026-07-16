@@ -93,6 +93,9 @@
   .qa-name label span{ color:var(--taupe); font-weight:600; }
   .qa-name input{ width:100%; padding:11px 14px; border:1.5px solid var(--line); border-radius:12px; background:var(--card); color:var(--ink); font-size:.95rem; font-family:inherit; outline:none; }
   .qa-name input:focus{ border-color:var(--gold); }
+  .qa-name input.need{ border-color:#d9544e; background:color-mix(in srgb, #d9544e 8%, var(--card)); }
+  .qa-name .hint{ font-size:.78rem; color:#d9544e; font-weight:600; margin-top:6px; display:none; }
+  .qa-name .hint.show{ display:block; }
   .fbrow{ display:flex; align-items:center; gap:8px; margin-top:9px; font-size:.82rem; color:var(--taupe); flex-wrap:wrap; }
   .fbrow button{ background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:3px 9px; cursor:pointer; font-family:inherit; font-size:.92rem; color:var(--ink); }
   .fbrow button:hover{ border-color:var(--gold); }
@@ -126,6 +129,7 @@
     <div class="qa-name">
       <label>Your name <span>· QA: we log test sessions for coverage</span></label>
       <input id="testerName" placeholder="e.g. John" autocomplete="off">
+      <div class="hint" id="nameHint">Please add your name so we can credit your feedback.</div>
     </div>
     <div id="whoList"></div>
     <div class="note">Ask Wag is a warm dog-care assistant — not a vet. Powered by Claude.</div>
@@ -150,7 +154,7 @@
     </button>
   </form>
 
-  <a class="wagbar" id="wagLink" href="https://wagthedog.example" target="_blank" rel="noopener"><span class="msg">Love having someone in your corner? 🐾</span><span class="go">See Wag the Dog →</span></a>
+  <a class="wagbar" id="wagLink" href="https://wagthedog.org" target="_blank" rel="noopener"><span class="msg">Love having someone in your corner? 🐾</span><span class="go">See Wag the Dog →</span></a>
 </div>
 
 <script>
@@ -307,7 +311,14 @@ function addFeedback(bub, context){
 
 // ── resident selection ──────────────────────────────────────────────────
 function pickResident(r){
-  const t = $("testerName"); if (t && t.value.trim()) testerName = t.value.trim();
+  const t = $("testerName");
+  const name = t ? t.value.trim() : "";
+  if (!name){                                   // no anonymous sessions — require a name
+    if (t){ t.classList.add("need"); t.focus(); }
+    const h = $("nameHint"); if (h) h.classList.add("show");
+    return;
+  }
+  testerName = name;
   current = r; messages = []; thread.innerHTML = "";
   $("picker").style.display = "none";
   addRow("wag", '<p class="serif">' + esc(r.greeting) + '</p>');
@@ -328,6 +339,9 @@ function buildPicker(){
 
 $("composeForm").addEventListener("submit", e => { e.preventDefault(); send(input.value); });
 $("switchBtn").addEventListener("click", () => { $("picker").style.display = "flex"; });
+$("testerName").addEventListener("input", e => {   // clear the "needs a name" cue as they type
+  if (e.target.value.trim()){ e.target.classList.remove("need"); const h = $("nameHint"); if (h) h.classList.remove("show"); }
+});
 buildPicker();
 renderChips();
 </script>
